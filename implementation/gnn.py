@@ -8,7 +8,7 @@ import torch_geometric.nn as pyg_nn
 from torch_geometric.graphgym import optim
 import torch_geometric.utils as pyg_utils
 
-from implementation.custom_convolution import CustomConv
+from implementation.custom_convolution import CustomConv, CustomLinear
 
 
 class GNNStack(nn.Module):
@@ -23,17 +23,13 @@ class GNNStack(nn.Module):
 
         # post-message-passing
         self.post_mp = nn.Sequential(
-            nn.Linear(hidden_dim, hidden_dim), nn.Dropout(0.25),
-            nn.Linear(hidden_dim, output_dim))
+            CustomLinear(hidden_dim, hidden_dim, bias=True), nn.Dropout(0.25),
+            CustomLinear(hidden_dim, output_dim, bias=True))
 
         self.dropout = 0.25
         self.num_layers = 3
 
     def build_conv_model(self, input_dim, hidden_dim):
-        # refer to pytorch geometric nn module for different implementation of GNNs.
-        # return pyg_nn.GINConv(nn.Sequential(nn.Linear(input_dim, hidden_dim),
-        #                       nn.ReLU(), nn.Linear(hidden_dim, hidden_dim)))
-        # return pyg_nn.GCNConv(input_dim, hidden_dim)
         return CustomConv(input_dim, hidden_dim)
 
     def forward(self, data):
