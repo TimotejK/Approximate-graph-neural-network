@@ -8,13 +8,13 @@ class Linear(Function):
     @staticmethod
     def forward(ctx, a, b, bias, w):
         ctx.save_for_backward(a, b, bias)
-        a = a * 100
-        b = b * 100
+        a = a * 256
+        b = b * 256
         if bias is not None:
-            result = torch.ops.my_ops.mat_mult(a, b.t(), w) + bias * 10000
+            result = torch.ops.my_ops.mat_mult(a, b.t(), w) + bias * 256*256
         else:
             result = torch.ops.my_ops.mat_mult(a, b.t(), w)
-        result = result / 10000
+        result = result / (256*256)
         return result
     @staticmethod
     def backward(ctx, grad_output):

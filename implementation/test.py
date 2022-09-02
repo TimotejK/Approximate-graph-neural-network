@@ -127,5 +127,5 @@ if __name__ == '__main__':
     writer = csv.writer(log)
     writer.writerow(['epoch', 'w', 'precise', 'precise training', 'accuracy', 'precision', 'recal', 'f1'])
     for w in range(3, 8):
-        model = train(dataset, classification_type, dropout=0.25, weight_decay=0.001, precise_training=True, w=w, csv_writer=writer)
+        model = train(dataset, classification_type, dropout=0.25, weight_decay=0.001, precise_training=False, w=w, csv_writer=writer)
     log.close()
